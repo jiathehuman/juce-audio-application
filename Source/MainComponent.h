@@ -34,10 +34,14 @@ public:
     //==============================================================================
     void paint (Graphics& g) override;
     void resized() override;
+    
+    //==============================================================================
+
     //==============================================================================
     void setTrack();
     void buttonClicked(Button*) override;
-//    void mouseDown(const MouseEvent &event) override;
+    //==============================================================================
+
 
 private:
     //==============================================================================
@@ -61,6 +65,9 @@ private:
     juce::CustomStyle custom_style;
     
     TextButton confirm_selection{"CONFIRM SELECTION"};
+    
+    // new code
+    juce::AudioBuffer<float> reverb_buffer;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)

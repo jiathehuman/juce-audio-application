@@ -26,29 +26,35 @@ player(_player)
     addAndMakeVisible(volSlider);
     addAndMakeVisible(speedSlider);
     addAndMakeVisible(posSlider);
+    addAndMakeVisible(lowSlider);
     
     addAndMakeVisible(volLabel);
     addAndMakeVisible(speedLabel);
     addAndMakeVisible(posLabel);
+//    addAndMakeVisible(highpass_Slider);
     
     addAndMakeVisible(waveformDisplay);
+    
+    lowSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
 
 
     playButton.addListener(this);
     playButton.setButtonText("PLAY");
-//    stopButton.addListener(this);
     loadButton.addListener(this);
-    
-//    playButton.setClickingTogglesState(true);
-
     volSlider.addListener(this);
     speedSlider.addListener(this);
     posSlider.addListener(this);
+    lowSlider.addListener(this);
+//    highpass_Slider.addListener(this);
+
 
 
     volSlider.setRange(0.0, 1.0);
     speedSlider.setRange(0.5, 5.0);
     posSlider.setRange(0.0, 1.0);
+    lowSlider.setRange(10.0, 20000.0,20);
+//    highpass_Slider.setRange(5000.0, 20000.0);
+
     
     
                             
@@ -127,10 +133,12 @@ void DeckGUI::resized()
     
     // JUCE array object acts like a vector
     Array<FlexItem> sliders_array;
-    sliders_array.add(FlexItem(getWidth()/3,100,volSlider));
-    sliders_array.add(FlexItem(getWidth()/3,100,speedSlider));
-    sliders_array.add(FlexItem(getWidth()/3,100,posSlider));
-    
+    sliders_array.add(FlexItem(getWidth()/5,100,volSlider));
+    sliders_array.add(FlexItem(getWidth()/5,100,speedSlider));
+    sliders_array.add(FlexItem(getWidth()/5,100,posSlider));
+    sliders_array.add(FlexItem(10,100,lowSlider));
+//    sliders_array.add(FlexItem(getWidth()/5,100,highpass_Slider));
+
     flexbox_sliders.items = sliders_array;
     flexbox_sliders.performLayout(bounds.removeFromTop(rowH * 3));
     
@@ -188,6 +196,12 @@ void DeckGUI::sliderValueChanged (Slider *slider)
     if (slider == &posSlider)
     {
         player->setPositionRelative(slider->getValue());
+    }
+    
+    if (slider == &lowSlider)
+    {
+
+        player->setLowPass(slider -> getValue());
     }
     
 }

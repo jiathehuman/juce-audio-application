@@ -18,9 +18,6 @@ namespace juce
 {
 void CustomStyle::drawRotarySlider (Graphics& g, int x, int y, int width, int height, float sliderPos,const float rotaryStartAngle, const float rotaryEndAngle, Slider& slider)
 {
-    //    auto outline = slider.findColour (Slider::rotarySliderOutlineColourId);
-    //    auto fill    = slider.findColour (Slider::rotarySliderFillColourId);
-    
     auto bounds = Rectangle<int> (x, y, width, height).toFloat().reduced (10);
     
     auto radius = jmin (bounds.getWidth(), bounds.getHeight()) / 2.0f;
@@ -104,4 +101,14 @@ PlayButton::PlayButton()
     setColour(buttonOnColourId, juce::Colour(242, 149, 89)); // set orange
     
 }
+
+CustomVerticalSlider::CustomVerticalSlider()
+{
+    setSliderStyle(Slider::SliderStyle::LinearBarVertical);
+    setTextBoxStyle(Slider::TextBoxBelow, false, 100, 25);
+    setColour(Slider::ColourIds::textBoxOutlineColourId, Colours::transparentBlack);
+    setColour(Slider::ColourIds::thumbColourId, juce::Colour(87, 204, 153));
+    setNumDecimalPlacesToDisplay(3);
+    
+};
 }

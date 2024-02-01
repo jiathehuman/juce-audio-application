@@ -13,7 +13,8 @@ Author:  matthew (Code provided on Coursera)
 DJAudioPlayer::DJAudioPlayer(AudioFormatManager& _formatManager) 
 : formatManager(_formatManager), isPlaying(false)
 {
-
+//    mixerSource.addInputSource(&base_source, false);
+//    mixerSource.addInputSource(&treble_source, false);
 }
 DJAudioPlayer::~DJAudioPlayer()
 {
@@ -23,17 +24,24 @@ DJAudioPlayer::~DJAudioPlayer()
 void DJAudioPlayer::prepareToPlay (int samplesPerBlockExpected, double sampleRate) 
 {
     transportSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    low_source.prepareToPlay(samplesPerBlockExpected, sampleRate);
     resampleSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    
 }
 void DJAudioPlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
     resampleSource.getNextAudioBlock(bufferToFill);
+//    base_source.getNextAudioBlock(bufferToFill);
 
 }
 void DJAudioPlayer::releaseResources()
 {
+
     transportSource.releaseResources();
     resampleSource.releaseResources();
+    low_source.releaseResources();
+//    high_source.releaseResources();
+
 }
 
 void DJAudioPlayer::loadURL(URL audioURL)
@@ -102,5 +110,17 @@ void DJAudioPlayer::stop()
 double DJAudioPlayer::getPositionRelative()
 {
     return transportSource.getCurrentPosition() / transportSource.getLengthInSeconds();
+}
+
+// New code
+
+void DJAudioPlayer::setLowPass(double hertz)
+{
+    if(isPlaying) // necessary because reader is only created by format manager in loadURL
+    {
+        auto* reader = readerSource -> getAudioFormatReader();
+        // low pass filter attenuates frequencies above cutoff frequencies
+        low_source.setCoefficients(IIRCoefficients::makeLowPass(reader->sampleRate, hertz));
+    }
 }
 

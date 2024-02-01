@@ -56,6 +56,10 @@ private:
     juce::CustomRotarySlider volSlider;
     juce::CustomRotarySlider speedSlider;
     juce::CustomRotarySlider posSlider;
+
+    juce::CustomVerticalSlider lowSlider;
+    
+
     
     
     Label volLabel{"volLabel", "Gain"};

@@ -31,6 +31,11 @@ class CustomRotarySlider: public Slider
     public:
     CustomRotarySlider();
 };
+class CustomVerticalSlider: public Slider
+{
+    public:
+    CustomVerticalSlider();
+};
 
 class PlayButton: public TextButton
 {

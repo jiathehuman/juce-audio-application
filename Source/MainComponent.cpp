@@ -49,6 +49,11 @@ MainComponent::~MainComponent()
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
+//    dsp::ProcessSpec spec;
+//    spec.sampleRate = sampleRate;
+//    spec.maximumBlockSize = samplesPerBlockExpected;
+//    spec.numChannels = 2;
+
     player1.prepareToPlay(samplesPerBlockExpected, sampleRate);
     player2.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
@@ -58,11 +63,16 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     mixerSource.addInputSource(&player2, false);
     
     std::cout << "MainComponent::prepareToPlay" << std::endl;
+    
+    // new code
+    reverb_buffer.setSize(8, samplesPerBlockExpected); // change the buffer size yo 16
 
  }
 void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
+    auto buffer_length = bufferToFill.buffer -> getNumSamples();
     mixerSource.getNextAudioBlock(bufferToFill);
+    
 }
 
 void MainComponent::releaseResources()
@@ -109,3 +119,4 @@ void MainComponent::buttonClicked(Button*)
 {
     setTrack();
 }
+
