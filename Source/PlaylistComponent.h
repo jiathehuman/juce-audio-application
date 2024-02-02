@@ -28,6 +28,7 @@ public:
     void resized() override;
     
     int getNumRows() override;
+
     void paintRowBackground(Graphics & g, int rowNumber, int width, int height, bool rowIsSelected) override;
     void paintCell(Graphics & g, int rowNumber, int columnId, int width, int height, bool rowIsSelected) override;
 

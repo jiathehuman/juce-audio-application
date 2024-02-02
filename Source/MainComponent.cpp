@@ -93,17 +93,17 @@ void MainComponent::paint (Graphics& g)
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
     g.setColour(Colours::white);
     g.setFont(14.0f);
-    g.drawText("PlaylistComponent", getLocalBounds(), Justification::centred, true);
+//    g.drawText("PlaylistComponent", getLocalBounds(), Justification::centred, true);
     
 }
 
 void MainComponent::resized()
 {
-    double rowH = getHeight()/6;
-    deckGUI1.setBounds(0, 0, getWidth()/2, rowH * 4);
-    deckGUI2.setBounds(getWidth()/2, 0, getWidth()/2, rowH * 4);
-    playlistComponent.setBounds(0, rowH * 4, getWidth(), rowH);
-    confirm_selection.setBounds(0,rowH * 5, getWidth(),rowH);
+    double rowH = getHeight()/8;
+    deckGUI1.setBounds(0, 0, getWidth()/2, rowH * 5);
+    deckGUI2.setBounds(getWidth()/2, 0, getWidth()/2, rowH * 5);
+    playlistComponent.setBounds(0, rowH * 4, getWidth(), rowH * 3);
+    confirm_selection.setBounds(0,rowH * 7, getWidth(),rowH);
 }
 
 void MainComponent::setTrack()

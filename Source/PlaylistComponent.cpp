@@ -50,13 +50,11 @@ void PlaylistComponent::paint (juce::Graphics& g)
 
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
-    g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
-    g.drawText ("PlaylistComponent", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+
 }
 
 void PlaylistComponent::resized()
@@ -81,9 +79,9 @@ int PlaylistComponent::getNumRows(){
 
 void PlaylistComponent::paintRowBackground(Graphics & g, int rowNumber, int width, int height, bool rowIsSelected){
     if (rowIsSelected) {
-        g.fillAll(Colours::orange);
+        g.fillAll(juce::Colour(23, 67, 99));
     }else{
-        g.fillAll(Colours::darkgrey);
+        g.fillAll(juce::Colour(49, 62, 68));
     }
 }
 
@@ -110,7 +108,6 @@ Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int columnI
             String id{std::to_string(rowNumber)};
             btn ->setComponentID(id);
             btn -> setName("player2_btn");
-            
             btn ->addListener(this);
             existingComponentToUpdate = btn;
         }
@@ -127,7 +124,7 @@ void PlaylistComponent::buttonClicked(Button * button) {
         std::cout << " This is a player 1 button" << std::endl;
         load_track("player1_btn", urlResults[id]);
         track1_name = trackTitles[id];
-        track1_drawable.setText("Selected for player 1: " + trackTitles[id]);
+        track1_drawable.setText("Selected for P1: " + trackTitles[id]);
 //        displaySelectedTrack(trackTitles[id]);
     };
     if(btn_name == "player2_btn")
@@ -135,7 +132,7 @@ void PlaylistComponent::buttonClicked(Button * button) {
         std::cout << " This is a player 2 button" << std::endl;
         load_track("player2_btn", urlResults[id]);
         track1_name = trackTitles[id];
-        track2_drawable.setText("Selected for player 2: " + trackTitles[id]);
+        track2_drawable.setText("Selected for P2: " + trackTitles[id]);
     };
     
 }

@@ -31,6 +31,7 @@ player(_player)
     addAndMakeVisible(volLabel);
     addAndMakeVisible(speedLabel);
     addAndMakeVisible(posLabel);
+    addAndMakeVisible(passLabel);
 //    addAndMakeVisible(highpass_Slider);
     
     addAndMakeVisible(waveformDisplay);
@@ -53,17 +54,18 @@ player(_player)
     speedSlider.setRange(0.5, 5.0);
     posSlider.setRange(0.0, 1.0);
     lowSlider.setRange(10.0, 20000.0,20);
-//    highpass_Slider.setRange(5000.0, 20000.0);
 
-    
-    
                             
-    volLabel.setJustificationType(Justification::centred);
-    speedLabel.setJustificationType(Justification::centred);
-    posLabel.setJustificationType(Justification::centred);
+
     volLabel.attachToComponent(&volSlider, false);
     speedLabel.attachToComponent(&speedSlider, false);
     posLabel.attachToComponent(&posSlider, false);
+    passLabel.attachToComponent(&lowSlider, false);
+    
+    volLabel.setJustificationType(Justification::centred);
+    speedLabel.setJustificationType(Justification::centred);
+    posLabel.setJustificationType(Justification::centred);
+    passLabel.setJustificationType(Justification::centred);
 
     startTimer(500);
 
@@ -136,7 +138,7 @@ void DeckGUI::resized()
     sliders_array.add(FlexItem(getWidth()/5,100,volSlider));
     sliders_array.add(FlexItem(getWidth()/5,100,speedSlider));
     sliders_array.add(FlexItem(getWidth()/5,100,posSlider));
-    sliders_array.add(FlexItem(10,100,lowSlider));
+    sliders_array.add(FlexItem(getWidth()/5,100,lowSlider));
 //    sliders_array.add(FlexItem(getWidth()/5,100,highpass_Slider));
 
     flexbox_sliders.items = sliders_array;

@@ -65,6 +65,7 @@ private:
     Label volLabel{"volLabel", "Gain"};
     Label speedLabel{"speedLabel", "Speed"};
     Label posLabel{"posLabel", "Pos"};
+    Label passLabel{"passLabel", "Lo/Hi Pass"};
 
     FileChooser fChooser{"Select a file..."};
 
