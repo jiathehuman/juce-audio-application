@@ -12,6 +12,7 @@
 #include "DJAudioPlayer.h"
 #include "DeckGUI.h"
 #include "PlaylistComponent.h"
+//#include "FFTClass.h"
 #include "custom_style.h"
 
 //==============================================================================
@@ -56,6 +57,7 @@ private:
 
     DJAudioPlayer player2{formatManager};
     DeckGUI deckGUI2{&player2, formatManager, thumbCache};
+//    FFTClass fft;
 
 
     MixerAudioSource mixerSource; 
@@ -64,7 +66,8 @@ private:
     
     juce::CustomStyle custom_style;
     
-    TextButton confirm_selection{"CONFIRM SELECTION"};
+    juce::ConfirmButton confirm_selection{};
+    //confirm_selection{"CONFIRM SELECTION"};
     
     // new code
     juce::AudioBuffer<float> reverb_buffer;

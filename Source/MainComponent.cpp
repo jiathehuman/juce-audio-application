@@ -70,7 +70,6 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
  }
 void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
-    auto buffer_length = bufferToFill.buffer -> getNumSamples();
     mixerSource.getNextAudioBlock(bufferToFill);
     
 }
@@ -99,11 +98,15 @@ void MainComponent::paint (Graphics& g)
 
 void MainComponent::resized()
 {
-    double rowH = getHeight()/8;
+    double rowH = getHeight()/9;
+
     deckGUI1.setBounds(0, 0, getWidth()/2, rowH * 5);
     deckGUI2.setBounds(getWidth()/2, 0, getWidth()/2, rowH * 5);
-    playlistComponent.setBounds(0, rowH * 4, getWidth(), rowH * 3);
-    confirm_selection.setBounds(0,rowH * 7, getWidth(),rowH);
+    
+    playlistComponent.setBounds(0, rowH * 5, getWidth(), rowH * 3);
+    confirm_selection.setBounds(0,rowH * 8, getWidth(),rowH );
+//    fft.setBounds(0, rowH * 8, getWidth(), rowH);
+    
 }
 
 void MainComponent::setTrack()

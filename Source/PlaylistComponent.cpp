@@ -9,6 +9,7 @@
 
 #include <JuceHeader.h>
 #include "PlaylistComponent.h"
+#include <vector>
 
 
 //==============================================================================
@@ -17,9 +18,11 @@ PlaylistComponent::PlaylistComponent()
     
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    tableComponent.getHeader().addColumn("Track title", 1, 200);
-    tableComponent.getHeader().addColumn("Load to Player 1", 2, 200);
-    tableComponent.getHeader().addColumn("Load to Player 2", 3, 200);
+    tableComponent.getHeader().addColumn("Track title", 1, 400);
+    tableComponent.getHeader().addColumn("Load to Player 1", 2, 100);
+    tableComponent.getHeader().addColumn("Load to Player 2", 3, 100);
+    tableComponent.getHeader().addColumn("Delete", 4, 100);
+//    tableComponent.getHeader().addColumn("Delete", 3, 200);
 
     
     tableComponent.setModel(this);
@@ -27,8 +30,10 @@ PlaylistComponent::PlaylistComponent()
     addAndMakeVisible(tableComponent);
     addAndMakeVisible(track1_drawable);
     addAndMakeVisible(track2_drawable);
+    
     track1_drawable.setColour(juce::Colours::whitesmoke);
     track2_drawable.setColour(juce::Colours::whitesmoke);
+    tableComponent.getHeader().setColour(0x1003810, juce::Colour(42, 157, 143)); // id of background
     track1_name = "track 1 not loaded";
     track2_name = "track 2 not loaded";
     load_playlist();
@@ -48,8 +53,10 @@ void PlaylistComponent::paint (juce::Graphics& g)
        drawing code..
     */
 
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
+//    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+    
+    g.setColour (Colours::black);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
     g.setColour (juce::Colours::white);
@@ -93,7 +100,7 @@ void PlaylistComponent::paintCell(Graphics & g, int rowNumber, int columnId, int
 Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int columnId, bool isRowSelected, Component *existingComponentToUpdate) {
     if(columnId == 2){
         if(existingComponentToUpdate==nullptr){
-            TextButton* btn = new TextButton{"LOAD"};
+            TextButton* btn = new juce::LoadButton{};;
             String id{std::to_string(rowNumber)};
             btn ->setComponentID(id);
             btn -> setName("player1_btn");
@@ -104,10 +111,20 @@ Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int columnI
     }
     if(columnId == 3){
         if(existingComponentToUpdate==nullptr){
-            TextButton* btn = new TextButton{"LOAD"};
+            TextButton* btn = new juce::LoadButton{};
             String id{std::to_string(rowNumber)};
             btn ->setComponentID(id);
             btn -> setName("player2_btn");
+            btn ->addListener(this);
+            existingComponentToUpdate = btn;
+        }
+    }
+    if(columnId == 4){
+        if(existingComponentToUpdate==nullptr){
+            TextButton* btn = new TextButton{"DELETE"};
+            String id{std::to_string(rowNumber)};
+            btn ->setComponentID(id);
+            btn -> setName("delete_btn");
             btn ->addListener(this);
             existingComponentToUpdate = btn;
         }
@@ -121,7 +138,7 @@ void PlaylistComponent::buttonClicked(Button * button) {
     String btn_name = button -> getName();
     if(btn_name == "player1_btn")
     {
-        std::cout << " This is a player 1 button" << std::endl;
+
         load_track("player1_btn", urlResults[id]);
         track1_name = trackTitles[id];
         track1_drawable.setText("Selected for P1: " + trackTitles[id]);
@@ -129,12 +146,32 @@ void PlaylistComponent::buttonClicked(Button * button) {
     };
     if(btn_name == "player2_btn")
     {
-        std::cout << " This is a player 2 button" << std::endl;
         load_track("player2_btn", urlResults[id]);
         track1_name = trackTitles[id];
         track2_drawable.setText("Selected for P2: " + trackTitles[id]);
     };
-    
+    if(btn_name == "delete_btn")
+    {
+        std::cout << "  if(btn_name == delete) is clicked" << std::endl;
+//        tableComponent.getComponentForRowNumber(id) -> setVisible(false);
+
+//        tableComponent.getComponentForRowNumber(id) -> setVisible(false);
+        
+//        tableComponent.removeChildComponent(tableComponent.getChildComponent(id));
+        
+//        tableComponent.getComponentForRowNumber(id) = nullptr;
+        
+        trackTitles.erase(trackTitles.begin() + id);
+            
+        for(int i = 0; i < trackTitles.size(); ++i)
+        {
+            std::cout << trackTitles[i] << std::endl;
+        }
+        
+        
+        tableComponent.updateContent();
+        tableComponent.repaint();
+    };
 }
 
 void PlaylistComponent::load_playlist()

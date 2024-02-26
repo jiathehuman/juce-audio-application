@@ -11,7 +11,7 @@ Author:  matthew (Code provided on Coursera)
 #include "DJAudioPlayer.h"
 
 DJAudioPlayer::DJAudioPlayer(AudioFormatManager& _formatManager) 
-: formatManager(_formatManager), isPlaying(false)
+: formatManager(_formatManager), isPlaying(false), duration(0), looping(false)
 {
 //    mixerSource.addInputSource(&base_source, false);
 //    mixerSource.addInputSource(&treble_source, false);
@@ -31,8 +31,6 @@ void DJAudioPlayer::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 void DJAudioPlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
     resampleSource.getNextAudioBlock(bufferToFill);
-//    base_source.getNextAudioBlock(bufferToFill);
-
 }
 void DJAudioPlayer::releaseResources()
 {
@@ -51,9 +49,19 @@ void DJAudioPlayer::loadURL(URL audioURL)
     {       
         std::unique_ptr<AudioFormatReaderSource> newSource (new AudioFormatReaderSource (reader, 
 true)); 
-        transportSource.setSource (newSource.get(), 0, nullptr, reader->sampleRate);             
+        newSource -> setLooping(looping);
+        transportSource.setSource (newSource.get(), 0, nullptr, reader->sampleRate);
         readerSource.reset (newSource.release());          
+        
+        std::cout << (reader->lengthInSamples) / (reader->sampleRate) << std::endl;
+        
+        duration = int((reader->lengthInSamples) / (reader->sampleRate));
+
     }
+}
+int DJAudioPlayer::setDuration()
+{
+    return duration;
 }
 
 void DJAudioPlayer::setGain(double gain)
@@ -120,6 +128,7 @@ void DJAudioPlayer::setLowPass(double hertz)
     {
         auto* reader = readerSource -> getAudioFormatReader();
         // low pass filter attenuates frequencies above cutoff frequencies
+
         low_source.setCoefficients(IIRCoefficients::makeLowPass(reader->sampleRate, hertz));
     }
 }

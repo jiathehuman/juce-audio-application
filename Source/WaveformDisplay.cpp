@@ -40,10 +40,13 @@ void WaveformDisplay::paint (Graphics& g)
 
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));   // clear the background
 
-    g.setColour (Colours::grey);
+    
+    g.setColour (Colours::black);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
-    g.setColour(juce::Colour(242, 212, 146));
+
+//    g.setColour(juce::Colour(242, 212, 146));
+    g.setColour(juce::Colour(233, 196, 106));
     if(fileLoaded)
     {
       audioThumb.drawChannel(g, 
@@ -53,7 +56,8 @@ void WaveformDisplay::paint (Graphics& g)
         0, 
         1.0f
       );
-      g.setColour(juce::Colour(242, 149, 89));
+//      g.setColour(juce::Colour(242, 149, 89));
+//        g.setColour(juce::Colour(233, 196, 106));
       g.drawRect(position * getWidth(), 0, getWidth() / 20, getHeight());
     }
     else 

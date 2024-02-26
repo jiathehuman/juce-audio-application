@@ -13,6 +13,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "DJAudioPlayer.h"
 #include "WaveformDisplay.h"
+#include "FFTClass.h"
 #include "custom_style.h"
 
 //==============================================================================
@@ -51,13 +52,23 @@ private:
 
     juce::PlayButton playButton{};
 //    TextButton stopButton{"STOP"};
-    TextButton loadButton{"LOAD"};
+//    juce::LoadButton loadButton{"LOAD"};
+    juce::LoadButton loadButton{};
+    
+    juce::LoopButton loopButton{};
     
     juce::CustomRotarySlider volSlider;
     juce::CustomRotarySlider speedSlider;
     juce::CustomRotarySlider posSlider;
 
     juce::CustomVerticalSlider lowSlider;
+    
+    DrawableText track_duration;
+    
+    void loadText();
+    void setLoop();
+    
+    bool looping;
     
 
     
@@ -66,12 +77,15 @@ private:
     Label speedLabel{"speedLabel", "Speed"};
     Label posLabel{"posLabel", "Pos"};
     Label passLabel{"passLabel", "Lo/Hi Pass"};
+    Label loopLabel{"loopLabel", "Loop"};
 
     FileChooser fChooser{"Select a file..."};
 
     WaveformDisplay waveformDisplay;
 
     DJAudioPlayer* player; 
+    
+    String displayed_duration;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
