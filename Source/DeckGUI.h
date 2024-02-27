@@ -13,7 +13,6 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "DJAudioPlayer.h"
 #include "WaveformDisplay.h"
-#include "FFTClass.h"
 #include "custom_style.h"
 
 //==============================================================================

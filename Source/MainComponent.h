@@ -57,7 +57,6 @@ private:
 
     DJAudioPlayer player2{formatManager};
     DeckGUI deckGUI2{&player2, formatManager, thumbCache};
-//    FFTClass fft;
 
 
     MixerAudioSource mixerSource; 

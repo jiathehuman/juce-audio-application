@@ -15,47 +15,50 @@
 //==============================================================================
 PlaylistComponent::PlaylistComponent()
 {
+    tableComponent.setModel(this); // current data model to show
     
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
+    // add four columns
     tableComponent.getHeader().addColumn("Track title", 1, 400);
     tableComponent.getHeader().addColumn("Load to Player 1", 2, 100);
     tableComponent.getHeader().addColumn("Load to Player 2", 3, 100);
     tableComponent.getHeader().addColumn("Delete", 4, 100);
-//    tableComponent.getHeader().addColumn("Delete", 3, 200);
-
     
-    tableComponent.setModel(this);
-    
+    // show the table and the songs selected
     addAndMakeVisible(tableComponent);
+    // track1_drawable contains title for song selected for player1
     addAndMakeVisible(track1_drawable);
+    // track2_drawable contains title for song selected for player2
     addAndMakeVisible(track2_drawable);
     
+    // set text to be white
     track1_drawable.setColour(juce::Colours::whitesmoke);
     track2_drawable.setColour(juce::Colours::whitesmoke);
+    
+    // set colour for the table's heading
     tableComponent.getHeader().setColour(0x1003810, juce::Colour(42, 157, 143)); // id of background
+    
+    // initial text before track is selected
     track1_name = "track 1 not loaded";
     track2_name = "track 2 not loaded";
-    load_playlist();
+    
+    load_playlist(); // when application starts, allow user to pick tracks
 
 }
 
+// deconstructor for playlist component
 PlaylistComponent::~PlaylistComponent()
 {
+    tableComponent.removeAllChildren();
+    // to prevent a leak, delete the tracks
+    delete track_1;
+    delete track_2;
+    delete spare_track;
 }
 
+// the look of the plalist
 void PlaylistComponent::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-
-//    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
-    
+    // draw a black box around the playlist component
     g.setColour (Colours::black);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
@@ -153,13 +156,6 @@ void PlaylistComponent::buttonClicked(Button * button) {
     if(btn_name == "delete_btn")
     {
         std::cout << "  if(btn_name == delete) is clicked" << std::endl;
-//        tableComponent.getComponentForRowNumber(id) -> setVisible(false);
-
-//        tableComponent.getComponentForRowNumber(id) -> setVisible(false);
-        
-//        tableComponent.removeChildComponent(tableComponent.getChildComponent(id));
-        
-//        tableComponent.getComponentForRowNumber(id) = nullptr;
         
         trackTitles.erase(trackTitles.begin() + id);
             
@@ -198,6 +194,7 @@ void PlaylistComponent::set_tracks(Array<File> audiofiles)
         trackTitles.push_back(audiofiles[i].getFileNameWithoutExtension());
 //        std::cout << urlResults[i].toString(true) << std::endl;
     }
+    spare_track = new Track("spare_track", urlResults[0]);
     tableComponent.updateContent();
 }
 
@@ -218,15 +215,13 @@ Track* PlaylistComponent::loadToPlayer(String btn_name)
 {
     if(btn_name == "player1_btn")
     {
-        return track_1;
+        if(track_1 != nullptr) return track_1;
+        else return spare_track;
     }
-    if(btn_name == "player2_btn")
+    else if(btn_name == "player2_btn")
     {
-        return track_2;
+        if(track_2 != nullptr) return track_2;
+        else return spare_track;
     }
 }
 
-void PlaylistComponent::displaySelectedTrack(String track_name)
-{
-//    return track_name;
-}

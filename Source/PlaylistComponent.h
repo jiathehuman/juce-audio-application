@@ -37,6 +37,8 @@ public:
     
     Track* track_1;
     Track* track_2;
+    Track* spare_track;
+    
     
     void buttonClicked(Button * button) override;
     Track* loadToPlayer(String btn_name);
@@ -46,8 +48,6 @@ private:
     void load_playlist();
     void set_tracks(Array<File> audiofiles);
     void load_track(String btn_name, URL track_url);
-    void displaySelectedTrack(String track_name);
-
     
     TableListBox tableComponent;
     std::vector<String> trackTitles;

@@ -12,7 +12,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "filterClass.h"
-#include "FFTClass.h"
+//#include "FFTClass.h"
 
 class DJAudioPlayer : public AudioSource {
   public:
