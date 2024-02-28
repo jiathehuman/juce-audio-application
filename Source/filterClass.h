@@ -1,21 +1,16 @@
-/*
-  ==============================================================================
-
-    filterClass.h
-    Created: 1 Feb 2024 2:36:44pm
-    Author:  Jia En
-
-  ==============================================================================
+//==============================================================================
+//==============================================================================
+/**
+@file FilterClass.h
+@brief FilterClass sets the highpass, cutoff frequency and sampling rate
 */
 
 #pragma once
-
 #include <vector>
 #include <JuceHeader.h>
 
 //==============================================================================
-/*
-*/
+
 class FilterClass  
 {
 public:
@@ -26,8 +21,8 @@ public:
     void processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&);
 
 private:
-    bool highpass;
-    float cutoff_frequency;
+    bool highpass; // boolean of highpass
+    float cutoff_frequency; 
     float sampling_rate;
     std::vector <float> dn_buffer;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FilterClass);

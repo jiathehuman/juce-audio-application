@@ -10,7 +10,6 @@
 #pragma once
 
 #include <JuceHeader.h>
-//#include "MainComponent.h"
 #include "custom_style.h"
 #include "Track.h"
 #include <vector>

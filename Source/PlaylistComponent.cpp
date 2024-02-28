@@ -48,11 +48,11 @@ PlaylistComponent::PlaylistComponent()
 // deconstructor for playlist component
 PlaylistComponent::~PlaylistComponent()
 {
-    tableComponent.removeAllChildren();
     // to prevent a leak, delete the tracks
     delete track_1;
     delete track_2;
     delete spare_track;
+    tableComponent.removeAllChildren();
 }
 
 // the look of the plalist
@@ -142,14 +142,14 @@ void PlaylistComponent::buttonClicked(Button * button) {
     if(btn_name == "player1_btn")
     {
 
-        load_track("player1_btn", urlResults[id]);
+        load_track("player1", urlResults[id]);
         track1_name = trackTitles[id];
         track1_drawable.setText("Selected for P1: " + trackTitles[id]);
 //        displaySelectedTrack(trackTitles[id]);
     };
     if(btn_name == "player2_btn")
     {
-        load_track("player2_btn", urlResults[id]);
+        load_track("player2", urlResults[id]);
         track1_name = trackTitles[id];
         track2_drawable.setText("Selected for P2: " + trackTitles[id]);
     };
@@ -198,27 +198,27 @@ void PlaylistComponent::set_tracks(Array<File> audiofiles)
     tableComponent.updateContent();
 }
 
-void PlaylistComponent::load_track(String btn_name, URL track_url)
+void PlaylistComponent::load_track(String type_name, URL track_url)
 {
-    std::cout << btn_name << " : " << track_url.toString(true) << std::endl;
-    if(btn_name == "player1_btn")
+    std::cout << type_name << " : " << track_url.toString(true) << std::endl;
+    if(type_name == "player1")
     {
-        track_1 = new Track(btn_name, track_url);
+        track_1 = new Track(type_name, track_url);
     }
-    if(btn_name == "player2_btn")
+    if(type_name == "player2")
     {
-        track_2 = new Track(btn_name, track_url);
+        track_2 = new Track(type_name, track_url);
     }
 };
 
-Track* PlaylistComponent::loadToPlayer(String btn_name)
+Track* PlaylistComponent::loadToPlayer(String type_name)
 {
-    if(btn_name == "player1_btn")
+    if(type_name == "player1")
     {
         if(track_1 != nullptr) return track_1;
         else return spare_track;
     }
-    else if(btn_name == "player2_btn")
+    else if(type_name == "player2")
     {
         if(track_2 != nullptr) return track_2;
         else return spare_track;

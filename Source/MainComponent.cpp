@@ -111,8 +111,8 @@ void MainComponent::resized()
 
 void MainComponent::setTrack()
 {
-    Track* track_1 = playlistComponent.loadToPlayer("player1_btn");
-    Track* track_2 = playlistComponent.loadToPlayer("player2_btn");
+    Track* track_1 = playlistComponent.loadToPlayer("player1");
+    Track* track_2 = playlistComponent.loadToPlayer("player2");
     deckGUI1.filesDropped(track_1 -> track_url);
     deckGUI2.filesDropped(track_2 -> track_url);
 }

@@ -32,7 +32,7 @@ void FilterClass::setSamplingRate(float sampling_rate)
 
 void FilterClass::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
-    constexpr auto PI = 3.14159265359f; // defined hard-code
+    constexpr auto PI = 3.14159265359f; // defined as hard-coded number
     dn_buffer.resize(buffer.getNumChannels(), 0.f);
     
     // invert output of allpass by multiplying by its negative
