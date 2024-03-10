@@ -1,18 +1,12 @@
-/*
-  ==============================================================================
-
-    DeckGUI.cpp
-    Created: 13 Mar 2020 6:44:48pm
-    Author:  Matthew (Code provided on Coursera)
-
-  ==============================================================================
-*/
+/** ===============================================================================
+@file DeckGUI.cpp
+@brief The CPP file implements the functions promised in the header file.
+ =====================================================================================*/
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "DeckGUI.h"
 
-//==============================================================================
-DeckGUI::DeckGUI(DJAudioPlayer* _player, 
+DeckGUI::DeckGUI(DJAudioPlayer* _player,
                 AudioFormatManager & 	formatManagerToUse,
                 AudioThumbnailCache & 	cacheToUse
                  ) : looping(false), 
@@ -20,24 +14,25 @@ waveformDisplay(formatManagerToUse, cacheToUse), player(_player)
 {
 
     addAndMakeVisible(playButton);
-//    addAndMakeVisible(stopButton);
     addAndMakeVisible(loadButton);
        
     addAndMakeVisible(volSlider);
     addAndMakeVisible(speedSlider);
     addAndMakeVisible(posSlider);
     addAndMakeVisible(lowSlider);
+    addAndMakeVisible(highSlider);
     
     addAndMakeVisible(volLabel);
     addAndMakeVisible(speedLabel);
     addAndMakeVisible(posLabel);
     addAndMakeVisible(passLabel);
-//    addAndMakeVisible(highpass_Slider);
+
     
     addAndMakeVisible(waveformDisplay);
     addAndMakeVisible(loopButton);
     addAndMakeVisible(loopLabel);
     lowSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
+    highSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
 
 
     playButton.addListener(this);
@@ -47,8 +42,7 @@ waveformDisplay(formatManagerToUse, cacheToUse), player(_player)
     speedSlider.addListener(this);
     posSlider.addListener(this);
     lowSlider.addListener(this);
-    
-//    loopButton.onClick = [this] {setLoop();};
+    highSlider.addListener(this);
     
     loopButton.addListener(this);
     loopButton.setButtonText("LOOP");
@@ -57,22 +51,22 @@ waveformDisplay(formatManagerToUse, cacheToUse), player(_player)
     volSlider.setRange(0.0, 1.0);
     speedSlider.setRange(0.5, 5.0);
     posSlider.setRange(0.0, 1.0);
-    lowSlider.setRange(10.0, 20000.0,20);
-
-                            
+    lowSlider.setRange(10.0, 20000.0, 20);
+    highSlider.setRange(10.0, 10000.0, 20);
 
     volLabel.attachToComponent(&volSlider, false);
     speedLabel.attachToComponent(&speedSlider, false);
     posLabel.attachToComponent(&posSlider, false);
     passLabel.attachToComponent(&lowSlider, false);
     loopLabel.attachToComponent(&loopButton, false);
+    highPassLabel.attachToComponent(&highSlider, false);
     
     volLabel.setJustificationType(Justification::centred);
     speedLabel.setJustificationType(Justification::centred);
     posLabel.setJustificationType(Justification::centred);
     passLabel.setJustificationType(Justification::centred);
     loopLabel.setJustificationType(Justification::centred);
-
+    highPassLabel.setJustificationType(Justification::centred);
 
     addAndMakeVisible(track_duration);
     track_duration.setColour(juce::Colour(233, 196, 106));
@@ -149,10 +143,11 @@ void DeckGUI::resized()
     
     // JUCE array object acts like a vector
     Array<FlexItem> sliders_array;
-    sliders_array.add(FlexItem(getWidth()/5,100,volSlider));
-    sliders_array.add(FlexItem(getWidth()/5,100,speedSlider));
-    sliders_array.add(FlexItem(getWidth()/5,100,posSlider));
-    sliders_array.add(FlexItem(getWidth()/5,100,lowSlider));
+    sliders_array.add(FlexItem(getWidth()/6,100,volSlider));
+    sliders_array.add(FlexItem(getWidth()/6,100,speedSlider));
+    sliders_array.add(FlexItem(getWidth()/6,100,posSlider));
+    sliders_array.add(FlexItem(getWidth()/6,100,lowSlider));
+    sliders_array.add(FlexItem(getWidth()/6,100,highSlider));
 //    sliders_array.add(FlexItem(getWidth()/5, 100, loopButton));
     
     track_duration.setBoundingBox(
@@ -239,8 +234,19 @@ void DeckGUI::sliderValueChanged (Slider *slider)
     
     if (slider == &lowSlider)
     {
-
-        player->setLowPass(slider -> getValue());
+//        double highValue = (highSlider.getValue());
+//        double lowValue = (slider -> getValue());
+//        if(lowValue < highValue){
+            player->setLowPass(slider -> getValue());
+//        }
+    }
+    if (slider == &highSlider)
+    {
+//        double lowValue = (lowSlider.getValue());
+//        double highValue = (slider -> getValue());
+//        if(highValue > lowValue){
+            player->setHighPass(slider -> getValue());
+//        }
     }
     
 }
@@ -258,16 +264,14 @@ void DeckGUI::filesDropped (const StringArray &files, int x, int y)
   if (files.size() == 1)
   {
     player->loadURL(URL{File{files[0]}});
+      
   }
 }
 
 void DeckGUI::filesDropped (URL url)
 {
-//    std::cout << "This is playbutton state: " << playButton.getState() << std::endl;
-//    std::cout << "This is called" << std::endl;
-//    
-//    playButton.setToggleState(false, NotificationType::dontSendNotification);
-    
+
+    // reset the play button
     if(playButton.getToggleState() == true) playButton.triggerClick();
     
     player->loadURL(URL{url});

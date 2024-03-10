@@ -1,27 +1,23 @@
-/*
-  ==============================================================================
 
-    PlaylistComponent.cpp
-    Created: 15 Aug 2023 4:59:38pm
-
-  ==============================================================================
-*/
+ /** ===============================================================================
+ @file PlaylistComponent.cpp
+ @brief The CPP file implements the functions promised in the header file.
+  =====================================================================================*/
 
 #include <JuceHeader.h>
 #include "PlaylistComponent.h"
 #include <vector>
 
 
-//==============================================================================
 PlaylistComponent::PlaylistComponent()
 {
     tableComponent.setModel(this); // current data model to show
     
     // add four columns
     tableComponent.getHeader().addColumn("Track title", 1, 400);
-    tableComponent.getHeader().addColumn("Load to Player 1", 2, 100);
-    tableComponent.getHeader().addColumn("Load to Player 2", 3, 100);
-    tableComponent.getHeader().addColumn("Delete", 4, 100);
+    tableComponent.getHeader().addColumn("Load to Player 1", 2, 130);
+    tableComponent.getHeader().addColumn("Load to Player 2", 3, 130);
+    tableComponent.getHeader().addColumn("Delete", 4, 130);
     
     // show the table and the songs selected
     addAndMakeVisible(tableComponent);
@@ -41,7 +37,7 @@ PlaylistComponent::PlaylistComponent()
     track1_name = "track 1 not loaded";
     track2_name = "track 2 not loaded";
     
-    load_playlist(); // when application starts, allow user to pick tracks
+    loadPlaylist(); // when application starts, allow user to pick tracks
 
 }
 
@@ -124,7 +120,7 @@ Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int columnI
     }
     if(columnId == 4){
         if(existingComponentToUpdate==nullptr){
-            TextButton* btn = new TextButton{"DELETE"};
+            TextButton* btn = new juce::DeleteButton{};
             String id{std::to_string(rowNumber)};
             btn ->setComponentID(id);
             btn -> setName("delete_btn");
@@ -142,14 +138,14 @@ void PlaylistComponent::buttonClicked(Button * button) {
     if(btn_name == "player1_btn")
     {
 
-        load_track("player1", urlResults[id]);
+        loadTrack("player1", urlResults[id]);
         track1_name = trackTitles[id];
         track1_drawable.setText("Selected for P1: " + trackTitles[id]);
 //        displaySelectedTrack(trackTitles[id]);
     };
     if(btn_name == "player2_btn")
     {
-        load_track("player2", urlResults[id]);
+        loadTrack("player2", urlResults[id]);
         track1_name = trackTitles[id];
         track2_drawable.setText("Selected for P2: " + trackTitles[id]);
     };
@@ -170,7 +166,7 @@ void PlaylistComponent::buttonClicked(Button * button) {
     };
 }
 
-void PlaylistComponent::load_playlist()
+void PlaylistComponent::loadPlaylist()
 {
     chooser_ptr = std::make_unique<FileChooser> ("Please select the mfile you want to load...",
                                                File::getSpecialLocation (File::userDesktopDirectory));
@@ -181,13 +177,13 @@ void PlaylistComponent::load_playlist()
     {
         Array<File> files = chooser.getResults();
         urlResults = chooser.getURLResults();
-        set_tracks(files);
+        setTracks(files);
 //        std::cout << sizeof(playlistFiles)<< std::endl;
     });
 
 }
 
-void PlaylistComponent::set_tracks(Array<File> audiofiles)
+void PlaylistComponent::setTracks(Array<File> audiofiles)
 {
     for (int i = 0; i < audiofiles.size(); i++)
     {
@@ -195,19 +191,21 @@ void PlaylistComponent::set_tracks(Array<File> audiofiles)
 //        std::cout << urlResults[i].toString(true) << std::endl;
     }
     spare_track = new Track("spare_track", urlResults[0]);
+    track_1 = new Track("player1", urlResults[0]);
+    track_2 = new Track("player2", urlResults[0]);
     tableComponent.updateContent();
 }
 
-void PlaylistComponent::load_track(String type_name, URL track_url)
+void PlaylistComponent::loadTrack(String type_name, URL track_url)
 {
     std::cout << type_name << " : " << track_url.toString(true) << std::endl;
     if(type_name == "player1")
     {
-        track_1 = new Track(type_name, track_url);
+        track_1-> track_url = track_url;
     }
     if(type_name == "player2")
     {
-        track_2 = new Track(type_name, track_url);
+        track_2 -> track_url = track_url;
     }
 };
 
@@ -223,5 +221,6 @@ Track* PlaylistComponent::loadToPlayer(String type_name)
         if(track_2 != nullptr) return track_2;
         else return spare_track;
     }
+    else return spare_track; // in case type_name is not either above
 }
 

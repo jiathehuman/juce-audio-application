@@ -1,20 +1,14 @@
-/*
-  ==============================================================================
 
-    WaveformDisplay.h
-    Created: 14 Mar 2020 3:50:16pm
-    Author:  Matthew (Code provided on Coursera)
-
-  ==============================================================================
-*/
-
+/**===============================================================================
+@file WaveformDisplay.h
+@brief The waveform display uses the audio thumbnail object to show a preview of the file.
+ The code is built on the template provided by Professsor Matthew from University of London.
+ ====================================================================================*/
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-//==============================================================================
-/*
-*/
+
 class WaveformDisplay    : public Component, 
                            public ChangeListener
 {

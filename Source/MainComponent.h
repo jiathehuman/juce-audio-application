@@ -1,10 +1,10 @@
-/*
-  ==============================================================================
+/**===============================================================================
+@file MainComponent.h
+@brief This file is auto-generated.
+ The code is built on the template provided by Professsor Matthew from University of London.
+ The main component prepares and processes audio from the two audio players.
+ ====================================================================================*/
 
-    This file was auto-generated!
-
-  ==============================================================================
-*/
 
 #pragma once
 
@@ -69,7 +69,7 @@ private:
     //confirm_selection{"CONFIRM SELECTION"};
     
     // new code
-    juce::AudioBuffer<float> reverb_buffer;
+//    juce::AudioBuffer<float> reverb_buffer;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)

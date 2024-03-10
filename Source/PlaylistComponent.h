@@ -1,23 +1,22 @@
-/*
-  ==============================================================================
-
-    PlaylistComponent.h
-    Created: 15 Aug 2023 4:59:38pm
-
-  ==============================================================================
-*/
+ /** ===============================================================================
+ @file PlaylistComponent.h
+ @brief The Playlist Component is a Table List Box Model component.
+  Users will be prompted to select audio tracks when the application is launched.
+  The playlist component acts as a button listener for the load and delete buttons.
+  In this module, three tracks are created - two for each player, and a spare track.
+  When the main component registers a click from the confirm button, the two tracks are loaded to the player.
+  =====================================================================================*/
 
 #pragma once
-
 #include <JuceHeader.h>
 #include "custom_style.h"
 #include "Track.h"
 #include <vector>
 #include <string>
 
-//==============================================================================
-/*
-*/
+
+
+
 class PlaylistComponent  : public juce::Component, public TableListBoxModel, public Button::Listener
 {
 public:
@@ -44,9 +43,9 @@ public:
     
 private:
 
-    void load_playlist();
-    void set_tracks(Array<File> audiofiles);
-    void load_track(String btn_name, URL track_url);
+    void loadPlaylist();
+    void setTracks(Array<File> audiofiles);
+    void loadTrack(String btn_name, URL track_url);
     
     TableListBox tableComponent;
     std::vector<String> trackTitles;

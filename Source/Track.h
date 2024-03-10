@@ -1,16 +1,11 @@
-//==============================================================================
-
-/**
+/**===============================================================================
 @file Track.h
 @brief Track object contains a type_name that indicates if the track is for player1, player2 or a spare track.
  Track object also contains a from which the deckgui can load the sound file to the player.
-*/
+ ====================================================================================*/
 
 #pragma once
-
 #include <JuceHeader.h>
-
-//==============================================================================
 
 
 class Track

@@ -1,10 +1,7 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-  ==============================================================================
-*/
+/** ===============================================================================
+@file MainComponent.cpp
+@brief The CPP file implements the functions promised in the header file.
+ =====================================================================================*/
 
 #include "MainComponent.h"
 
@@ -65,7 +62,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     std::cout << "MainComponent::prepareToPlay" << std::endl;
     
     // new code
-    reverb_buffer.setSize(8, samplesPerBlockExpected); // change the buffer size yo 16
+//    reverb_buffer.setSize(8, samplesPerBlockExpected);  change the buffer size yo 16
 
  }
 void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
@@ -105,9 +102,14 @@ void MainComponent::resized()
     
     playlistComponent.setBounds(0, rowH * 5, getWidth(), rowH * 3);
     confirm_selection.setBounds(0,rowH * 8, getWidth(),rowH );
-//    fft.setBounds(0, rowH * 8, getWidth(), rowH);
     
 }
+
+void MainComponent::buttonClicked(Button*)
+{
+    setTrack(); // calls set track below
+}
+
 
 void MainComponent::setTrack()
 {
@@ -118,8 +120,4 @@ void MainComponent::setTrack()
 }
 
 
-void MainComponent::buttonClicked(Button*)
-{
-    setTrack();
-}
 

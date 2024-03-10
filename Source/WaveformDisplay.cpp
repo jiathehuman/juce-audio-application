@@ -1,17 +1,11 @@
-/*
-  ==============================================================================
+ /**===============================================================================
+ @file WaveformDisplay.cpp
+ @brief The CPP file implements the functions promised in the header file.
+  ====================================================================================*/
 
-    WaveformDisplay.cpp
-    Created: 14 Mar 2020 3:50:16pm
-    Author:  matthew
-
-  ==============================================================================
-*/
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "WaveformDisplay.h"
-
-//==============================================================================
 WaveformDisplay::WaveformDisplay(AudioFormatManager & 	formatManagerToUse,
                                  AudioThumbnailCache & 	cacheToUse) :
                                  audioThumb(1000, formatManagerToUse, cacheToUse), 

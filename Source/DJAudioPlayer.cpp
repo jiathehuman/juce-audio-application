@@ -1,17 +1,13 @@
-/*
-==============================================================================
-
-DJAudioPlayer.cpp
-Created: 13 Mar 2020 4:22:22pm
-Author:  matthew (Code provided on Coursera)
-
-==============================================================================
-*/
+/**===============================================================================
+ @file DJAudioPlayer.cpp
+ @brief The CPP file implements the functions promised in the header file.
+ =================================================================================== */
 
 #include "DJAudioPlayer.h"
+#include <optional>
 
 DJAudioPlayer::DJAudioPlayer(AudioFormatManager& _formatManager) 
-: formatManager(_formatManager), isPlaying(false), duration(0), looping(false)
+: duration(0), looping(false), formatManager(_formatManager), isPlaying(false)
 {
 //    mixerSource.addInputSource(&base_source, false);
 //    mixerSource.addInputSource(&treble_source, false);
@@ -110,10 +106,10 @@ void DJAudioPlayer::start()
 
 }
 
-void DJAudioPlayer::stop()
-{
-  transportSource.stop();
-}
+//void DJAudioPlayer::stop()
+//{
+//  transportSource.stop();
+//}
 
 double DJAudioPlayer::getPositionRelative()
 {
@@ -133,3 +129,13 @@ void DJAudioPlayer::setLowPass(double hertz)
     }
 }
 
+void DJAudioPlayer::setHighPass(double hertz)
+{
+    if(isPlaying) // necessary because reader is only created by format manager in loadURL
+    {
+        auto* reader = readerSource -> getAudioFormatReader();
+        // low pass filter attenuates frequencies above cutoff frequencies
+
+        high_source.setCoefficients(IIRCoefficients::makeHighPass(reader->sampleRate, hertz));
+    }
+}

@@ -1,18 +1,13 @@
-/*
-  ==============================================================================
-
-    DJAudioPlayer.h
-    Created: 13 Mar 2020 4:22:22pm
-    Author:  matthew (Code provided on Coursera)
-
-  ==============================================================================
-*/
+/**===============================================================================
+@file DJAudioPlayer.h
+@brief The code is built on the template provided by Professsor Matthew from University of London.
+ ===================================================================================*/
 
 #pragma once
+//#include "../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "filterClass.h"
-//#include "FFTClass.h"
+
 
 class DJAudioPlayer : public AudioSource {
   public:
@@ -23,6 +18,9 @@ class DJAudioPlayer : public AudioSource {
     void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override;
     void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override;
     void releaseResources() override;
+    
+    void start();
+//    void stop();
 
     void loadURL(URL audioURL);
     void setGain(double gain);
@@ -30,31 +28,29 @@ class DJAudioPlayer : public AudioSource {
     void setPosition(double posInSecs);
     void setPositionRelative(double pos);
     int setDuration();
+
     
 
-    void start();
-    void stop();
+
 
     /** get the relative position of the playhead */
     double getPositionRelative();
     void setLowPass(double hertz);
+    void setHighPass(double hertz);
     int duration;
     
     bool looping;
 
-
-//    void setHighPass(double hertz);
-
-    
 
 private:
     AudioFormatManager& formatManager;
     std::unique_ptr<AudioFormatReaderSource> readerSource;
     AudioTransportSource transportSource; 
     
+    // passed serially transport -> low -> high -> resample
     IIRFilterAudioSource low_source{&transportSource, false};
-//    IIRFilterAudioSource high_source{&low_source, false};
-    ResamplingAudioSource resampleSource{&low_source, false, 2};
+    IIRFilterAudioSource high_source{&low_source, false};
+    ResamplingAudioSource resampleSource{&high_source, false, 2};
     
     bool isPlaying;
 

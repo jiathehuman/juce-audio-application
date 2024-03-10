@@ -1,12 +1,12 @@
-/*
-  ==============================================================================
+/**===============================================================================
+@file DeckGUI.h
+@brief The deckGUI serves as the interface between the button/slider components and the DJ audio player.
+ The code is built on the template provided by Professsor Matthew from University of London.
+ ====================================================================================*/
 
-    DeckGUI.h
-    Created: 13 Mar 2020 6:44:48pm
-    Author:  matthew (Code provided on Coursera)
-
-  ==============================================================================
-*/
+#pragma once
+//#include "../JuceLibraryCode/JuceHeader.h"
+#include <JuceHeader.h>
 
 #pragma once
 
@@ -62,6 +62,8 @@ private:
 
     juce::CustomVerticalSlider lowSlider;
     
+    juce::CustomVerticalSlider highSlider;
+    
     DrawableText track_duration;
     
     void loadText();
@@ -75,7 +77,8 @@ private:
     Label volLabel{"volLabel", "Gain"};
     Label speedLabel{"speedLabel", "Speed"};
     Label posLabel{"posLabel", "Pos"};
-    Label passLabel{"passLabel", "Lo/Hi Pass"};
+    Label passLabel{"passLabel", "Lo Pass"};
+    Label highPassLabel{"loopLabel", "Hi Pass"};
     Label loopLabel{"loopLabel", "Loop"};
 
     FileChooser fChooser{"Select a file..."};
