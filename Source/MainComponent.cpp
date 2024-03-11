@@ -8,10 +8,10 @@
 //==============================================================================
 MainComponent::MainComponent()
 {
-    // Make sure you set the size of the component after
-    // you add any child components.
-    setSize (800, 600);
+
+    setSize (800, 600); // the size of the whole thing
     
+    // use the CustomStyle class created
     juce::LookAndFeel::setDefaultLookAndFeel(&custom_style);
 
     // Some platforms require permissions to open input channels so request that here
@@ -27,13 +27,15 @@ MainComponent::MainComponent()
         setAudioChannels (0, 2);
     }  
 
-    addAndMakeVisible(deckGUI1); 
+    /** add and make visible the two deckGUIs, the playlist component and the confirm selection button*/
+    addAndMakeVisible(deckGUI1);
     addAndMakeVisible(deckGUI2);
     addAndMakeVisible(playlistComponent);
-    formatManager.registerBasicFormats();
     addAndMakeVisible(confirm_selection);
+    
+    formatManager.registerBasicFormats(); // register basic formats
     confirm_selection.addListener(this);
-//    playlistComponent.addChangeListener(this);
+
 }
 
 MainComponent::~MainComponent()
@@ -46,28 +48,23 @@ MainComponent::~MainComponent()
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-//    dsp::ProcessSpec spec;
-//    spec.sampleRate = sampleRate;
-//    spec.maximumBlockSize = samplesPerBlockExpected;
-//    spec.numChannels = 2;
-
+    // Prepares two DJAudioPlayers
     player1.prepareToPlay(samplesPerBlockExpected, sampleRate);
     player2.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
+    // Prepares mixerSource
     mixerSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
 
+    // Adds reference to two DJAudioPlayers as inputs
     mixerSource.addInputSource(&player1, false);
     mixerSource.addInputSource(&player2, false);
     
     std::cout << "MainComponent::prepareToPlay" << std::endl;
-    
-    // new code
-//    reverb_buffer.setSize(8, samplesPerBlockExpected);  change the buffer size yo 16
 
  }
 void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
-    mixerSource.getNextAudioBlock(bufferToFill);
+    mixerSource.getNextAudioBlock(bufferToFill); // periodically called
     
 }
 
@@ -75,8 +72,6 @@ void MainComponent::releaseResources()
 {
     // This will be called when the audio device stops, or when it is being
     // restarted due to a setting change.
-
-    // For more details, see the help for AudioProcessor::releaseResources()
     player1.releaseResources();
     player2.releaseResources();
     mixerSource.releaseResources();
@@ -85,39 +80,39 @@ void MainComponent::releaseResources()
 //==============================================================================
 void MainComponent::paint (Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
-    g.setColour(Colours::white);
+    g.setColour(Colours::white); // text colour
     g.setFont(14.0f);
-//    g.drawText("PlaylistComponent", getLocalBounds(), Justification::centred, true);
-    
 }
 
 void MainComponent::resized()
 {
     double rowH = getHeight()/9;
 
+    // Position of the deckGUI
     deckGUI1.setBounds(0, 0, getWidth()/2, rowH * 5);
     deckGUI2.setBounds(getWidth()/2, 0, getWidth()/2, rowH * 5);
     
+    // Position of the playlist component and confirm button
     playlistComponent.setBounds(0, rowH * 5, getWidth(), rowH * 3);
     confirm_selection.setBounds(0,rowH * 8, getWidth(),rowH );
     
 }
-
+// New code -----------------------------------------------------------------------------------------
 void MainComponent::buttonClicked(Button*)
 {
-    setTrack(); // calls set track below
+    setTrack(); // calls set track below to load the tracks to deckGUI
 }
 
 
 void MainComponent::setTrack()
 {
-    Track* track_1 = playlistComponent.loadToPlayer("player1");
+    /** get the Track from playlist */
+    Track* track_1 = playlistComponent.loadToPlayer("player1"); 
     Track* track_2 = playlistComponent.loadToPlayer("player2");
-    deckGUI1.filesDropped(track_1 -> track_url);
-    deckGUI2.filesDropped(track_2 -> track_url);
+    deckGUI1.filesDropped(track_1 -> track_url); // filesDropped passes track to the first audio player
+    deckGUI2.filesDropped(track_2 -> track_url); // filesDropped passes track to the second audio player
 }
-
+// End of new code ------------------------------------------------------------------------------------
 
 

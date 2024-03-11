@@ -18,23 +18,15 @@ void CustomStyle::drawRotarySlider (Graphics& g, int x, int y, int width, int he
     auto lineW = jmin (8.0f, radius * 0.5f);
     auto arcRadius = radius - lineW * 0.5f;
     
-
-    
-//    g.setGradientFill(ColourGradient(Colours::blue,bounds.getX() - 100,bounds.getY() - 100, Colours::red, bounds.getCentreX(), bounds.getCentreY(), false));
     
     // https://forum.juce.com/t/is-there-a-way-to-create-radial-gradients-for-ellipses/58048
-//    juce::ColourGradient gradient{ juce::Colour(233, 196, 106),
-//               bounds.getBottomRight(),
-//        juce::Colour(133, 96, 6).withSaturation(1.0f).withBrightness(1.2f),
-//               bounds.getTopLeft(), true };
     
+    // New code -----------------------------------------------------------------------------------
+    /** Gradient on the rotary sliders*/
     juce::ColourGradient gradient{ juce::Colour(34, 87, 122),
                bounds.getBottomRight(),
         juce::Colour(0,0,0).withSaturation(1.0f),
                bounds.getTopLeft(), true };
-    
-//           auto transform = juce::AffineTransform::scale(0.5f, 1.5f).
-//               translated(bounds.getWidth() * 0.25f, bounds.getHeight() * -0.25f);
     
     auto transform = juce::AffineTransform::scale(0.5f, 1.0f).translated(bounds.getWidth() * 0.25f, bounds.getHeight() * -0.25f);
     
@@ -46,9 +38,8 @@ void CustomStyle::drawRotarySlider (Graphics& g, int x, int y, int width, int he
                   bounds.getCentreY() - arcRadius,
                   arcRadius * 2,
                   arcRadius * 2);
-//    g.setColour(Colours::black);
-
     
+    // End of new code ------------------------------------------------------------------------------
 
     
     // the background path for the rotary slider
@@ -63,7 +54,8 @@ void CustomStyle::drawRotarySlider (Graphics& g, int x, int y, int width, int he
                                  true);
     
     
-    // New code ----------------------------------------
+    // New code -----------------------------------------------------------------------------------
+    /** Adding a centered smaller arc as an additional detail */
     backgroundArc.addCentredArc (bounds.getCentreX(),
                                  bounds.getCentreY(),
                                  arcRadius - 10.0f,
@@ -73,11 +65,12 @@ void CustomStyle::drawRotarySlider (Graphics& g, int x, int y, int width, int he
                                  rotaryEndAngle,
                                  true);
     
+    /** Set Colour as a dark blue*/
     g.setColour (juce::Colour(34, 87, 122));
+    /** Draw the path*/
     g.strokePath (backgroundArc, PathStrokeType (lineW - 5.0f, PathStrokeType::curved, PathStrokeType::rounded));
     
-    // End of new code ----------------------------------------
-    
+    // End of new code -----------------------------------------------------------------------------
     
     if (slider.isEnabled())
     {
@@ -90,9 +83,8 @@ void CustomStyle::drawRotarySlider (Graphics& g, int x, int y, int width, int he
                                 rotaryStartAngle,
                                 toAngle,
                                 true);
-        
-        //        g.setColour (fill);
-        g.setColour(juce::Colour(128, 237, 153));
+    
+        g.setColour(juce::Colour(128, 237, 153)); // new code - setting a new colour
         g.strokePath (valueArc, PathStrokeType (lineW, PathStrokeType::curved, PathStrokeType::rounded));
     }
     
@@ -104,43 +96,45 @@ void CustomStyle::drawRotarySlider (Graphics& g, int x, int y, int width, int he
     g.setColour(juce::Colour(56, 163, 165));
     g.fillEllipse (Rectangle<float> (thumbWidth, thumbWidth).withCentre (thumbPoint));
     
-    // New code ----------------------------------------
+    // New code -----------------------------------------------------------------------------------
     // add a line; a path is a sequence of lines and curves
     g.drawLine(backgroundArc.getBounds().getCentreX(), backgroundArc.getBounds().getCentreY(),thumbPoint.getX(),thumbPoint.getY(),lineW);
-    // End of new code ----------------------------------------
+    // End of new code ----------------------------------------------------------------------------
 }
 
-
-CustomRotarySlider::CustomRotarySlider()
+// New code ---------------------------------------------------------------------------------------
+CustomRotarySlider::CustomRotarySlider() // custom textbox style
 {
+    /** set all styles to be rotary horizontal drag **/
     setSliderStyle(Slider::SliderStyle::RotaryHorizontalDrag);
+    /** set the text box to be below **/
     setTextBoxStyle(Slider::TextBoxBelow, false, 100, 25);
+    /** set the text box to have no outline **/
     setColour(Slider::ColourIds::textBoxOutlineColourId, Colours::transparentBlack);
+    /** txt box truncates to 3 decimal places**/
     setNumDecimalPlacesToDisplay(3);
     
 };
 
-PlayButton::PlayButton()
+PlayButton::PlayButton() // transparent outline and customised toggle on/of colours
 {
-    // reference: https://forum.juce.com/t/how-to-set-the-colour-of-the-outline-on-a-textbutton/37925/3
+    /** button have no outline */
     setColour(ComboBox::outlineColourId, juce::Colours::transparentBlack);
+    /** button can toggle*/
     setClickingTogglesState(true);
-//    setColour(buttonColourId, juce::Colour(56, 163, 165)); // set blue
-    setColour(buttonOnColourId, juce::Colour(242, 149, 89)); // set orange
-    // 128, 237, 153)
-    setColour(buttonColourId, juce::Colour(118,227,143));
+    setColour(buttonOnColourId, juce::Colour(242, 149, 89)); // set orange for 'stop'
+    setColour(buttonColourId, juce::Colour(118,227,143)); // sets green for 'play'
     setColour(textColourOffId, juce::Colours::black); // set text black
-
-//    setColour(buttonColourId, juce::Colour(42, 157, 143));
-    
 }
 
 LoadButton::LoadButton()
 {
+    /** button have no outline */
     setColour(ComboBox::outlineColourId, juce::Colours::transparentBlack);
+    /** button cannot toggle*/
     setClickingTogglesState(false);
-    setButtonText("LOAD");
-    setColour(buttonColourId, juce::Colour(38, 70, 83)); // set blue
+    setButtonText("LOAD"); // the button text 
+    setColour(buttonColourId, juce::Colour(38, 70, 83)); // set button to be blue
     setColour(textColourOnId, juce::Colours::white); // set text white
 }
 
@@ -148,23 +142,22 @@ LoadButton::LoadButton()
 
 LoopButton::LoopButton()
 {
+    /** button have no outline */
     setColour(ComboBox::outlineColourId, juce::Colours::transparentBlack);
+    /** button can toggle*/
     setClickingTogglesState(true);
-//    setColour(buttonColourId, juce::Colour(56, 163, 165)); // set blue
-    setColour(buttonOnColourId, juce::Colour(40, 114, 113)); // set orange
-    // 128, 237, 153)
-    setColour(buttonColourId, juce::Colour(30, 104, 103));
-//    setColour(textColourOffId, juce::Colours::black); // set text black
-    setColour(textColourOffId, juce::Colours::white); // set off colour white
+    setColour(buttonOnColourId, juce::Colour(40, 114, 113)); // blue
+    setColour(buttonColourId, juce::Colour(50, 124, 123)); // lighter blue
+    setColour(textColourOffId, juce::Colours::white);
     
-
-//    setColour(buttonColourId, juce::Colour(42, 157, 143));
     
 }
 
 ConfirmButton::ConfirmButton()
 {
+    /** button have no outline */
     setColour(ComboBox::outlineColourId, juce::Colours::transparentBlack);
+    /** button cannot toggle*/
     setClickingTogglesState(false);
     setButtonText("CONFIRM SELECTION");
     setColour(buttonColourId, juce::Colour(138, 177, 125)); // set blue
@@ -173,8 +166,10 @@ ConfirmButton::ConfirmButton()
 
 DeleteButton::DeleteButton()
 {
+    /** button have no outline */
     setColour(ComboBox::outlineColourId, juce::Colours::transparentBlack);
     setClickingTogglesState(false);
+    /** button cannot toggle*/
     setButtonText("DELETE");
     setColour(buttonColourId, juce::Colour(32, 44, 57)); // set blue
     setColour(textColourOnId, juce::Colours::white); // set text white
@@ -183,12 +178,15 @@ DeleteButton::DeleteButton()
 
 CustomVerticalSlider::CustomVerticalSlider()
 {
-    setSliderStyle(Slider::SliderStyle::LinearBarVertical);
+    /** set the text box value to be below */
     setTextBoxStyle(Slider::TextBoxBelow, false, 100, 25);
+    /** text bix have no outline */
     setColour(Slider::ColourIds::textBoxOutlineColourId, Colours::transparentBlack);
-    setColour(Slider::ColourIds::thumbColourId, juce::Colour(128, 237, 153));
-    setColour(Slider::ColourIds::trackColourId, juce::Colour(231, 111, 81));
+    setColour(Slider::ColourIds::thumbColourId, juce::Colour(128, 237, 153)); // neon green
+    setColour(Slider::ColourIds::trackColourId, juce::Colour(231, 111, 81)); // orange
     setNumDecimalPlacesToDisplay(3);
     
 };
 }
+
+// End of new code ---------------------------------------------------------------------------------

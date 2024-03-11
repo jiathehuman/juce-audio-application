@@ -7,7 +7,7 @@
 #pragma once
 #include <JuceHeader.h>
 
-
+// New code ---------------------------------------------------------------------------------------
 class Track
 {
 public:
@@ -28,3 +28,4 @@ public:
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Track) // detects leak from track
 };
+// End of code -----------------------------------------------------------------------------------

@@ -13,9 +13,7 @@ WaveformDisplay::WaveformDisplay(AudioFormatManager & 	formatManagerToUse,
                                  position(0)
                           
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-
+    // set the audio thumbnail as a change listener
   audioThumb.addChangeListener(this);
 }
 
@@ -25,22 +23,14 @@ WaveformDisplay::~WaveformDisplay()
 
 void WaveformDisplay::paint (Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
+    // clear the background
+    g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
-    g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));   // clear the background
-
-    
     g.setColour (Colours::black);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
 
-//    g.setColour(juce::Colour(242, 212, 146));
-    g.setColour(juce::Colour(233, 196, 106));
+    g.setColour(juce::Colour(233, 196, 106)); // colour of the audio thumbnail
     if(fileLoaded)
     {
       audioThumb.drawChannel(g, 
@@ -50,34 +40,29 @@ void WaveformDisplay::paint (Graphics& g)
         0, 
         1.0f
       );
-//      g.setColour(juce::Colour(242, 149, 89));
-//        g.setColour(juce::Colour(233, 196, 106));
       g.drawRect(position * getWidth(), 0, getWidth() / 20, getHeight());
     }
-    else 
+    else // file is not loaded, draw some placeholder text
     {
       g.setFont (20.0f);
       g.drawText ("File not loaded...", getLocalBounds(),
-                  Justification::centred, true);   // draw some placeholder text
+                  Justification::centred, true);
 
     }
 }
 
 void WaveformDisplay::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
-
+ // no child components to set bounds for
 }
 
 void WaveformDisplay::loadURL(URL audioURL)
 {
-  audioThumb.clear();
-  fileLoaded  = audioThumb.setSource(new URLInputSource(audioURL));
-  if (fileLoaded)
+  audioThumb.clear(); // resets source and clear channel data
+  fileLoaded  = audioThumb.setSource(new URLInputSource(audioURL)); // true
+  if (fileLoaded) // file loaded successfully
   {
-//    std::cout << "wfd: loaded! " << std::endl;
-    repaint();
+    repaint(); // paint the thumbnail
   }
   else {
     std::cout << "wfd: not loaded! " << std::endl;
@@ -87,21 +72,17 @@ void WaveformDisplay::loadURL(URL audioURL)
 
 void WaveformDisplay::changeListenerCallback (ChangeBroadcaster *source)
 {
-//    std::cout << "wfd: change received! " << std::endl;
-
-    repaint();
-
+    repaint(); // continuously paint
 }
 
 void WaveformDisplay::setPositionRelative(double pos)
 {
-  if (pos != position)
+  if (pos != position) // if the position has changed
   {
-    position = pos;
+    position = pos; // update the position
     repaint();
   }
 
-  
 }
 
 

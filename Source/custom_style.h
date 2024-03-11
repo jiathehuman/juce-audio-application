@@ -9,7 +9,7 @@
 #pragma once
 #include <JuceHeader.h>
 
-
+// New code -----------------------------------------------------------------------------------
 namespace juce
 {
 class CustomStyle  : public LookAndFeel_V4
@@ -72,7 +72,7 @@ class LoopButton: public TextButton
 };
 
 /**
-Custom delete buttons for the deleting the track in the playlist component
+Custom delete buttons for the deletion of tracks in column 4 of the playlist component
 */
 class DeleteButton: public TextButton
 {
@@ -80,6 +80,5 @@ class DeleteButton: public TextButton
     DeleteButton();
 };
 
-
 }
-
+// End of new code -------------------------------------------------------------------------

@@ -9,18 +9,21 @@
 DJAudioPlayer::DJAudioPlayer(AudioFormatManager& _formatManager) 
 : duration(0), looping(false), formatManager(_formatManager), isPlaying(false)
 {
-//    mixerSource.addInputSource(&base_source, false);
-//    mixerSource.addInputSource(&treble_source, false);
+    // Constructor for DJAudioPlayer
 }
 DJAudioPlayer::~DJAudioPlayer()
 {
-
+    // Destructor for DJAudioPlayer
 }
 
 void DJAudioPlayer::prepareToPlay (int samplesPerBlockExpected, double sampleRate) 
 {
+    // prepare the transport source and the two IIR filter audio sources
     transportSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    // New code -----------------------------------------------------------------------------------
     low_source.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    high_source.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    // End of new code ----------------------------------------------------------------------------
     resampleSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
 }
@@ -30,11 +33,11 @@ void DJAudioPlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
 }
 void DJAudioPlayer::releaseResources()
 {
-
+    /** release resources when the audio playback stops */
     transportSource.releaseResources();
     resampleSource.releaseResources();
     low_source.releaseResources();
-//    high_source.releaseResources();
+    high_source.releaseResources();
 
 }
 
@@ -45,20 +48,26 @@ void DJAudioPlayer::loadURL(URL audioURL)
     {       
         std::unique_ptr<AudioFormatReaderSource> newSource (new AudioFormatReaderSource (reader, 
 true)); 
+        // set the source to be looping or not looping, depending on the looping boolean
         newSource -> setLooping(looping);
+        
+        // set the new source in transport source
         transportSource.setSource (newSource.get(), 0, nullptr, reader->sampleRate);
         readerSource.reset (newSource.release());          
         
-        std::cout << (reader->lengthInSamples) / (reader->sampleRate) << std::endl;
-        
+        // New code ---------------------------------------------------------------------------------
+        // get the duration of the track
         duration = int((reader->lengthInSamples) / (reader->sampleRate));
+        // End of new code --------------------------------------------------------------------------
 
     }
 }
+// New code -----------------------------------------------------------------------------------------
 int DJAudioPlayer::setDuration()
 {
-    return duration;
+    return duration; // return the duration of the track when called by deckGUI
 }
+// End of new code ----------------------------------------------------------------------------------
 
 void DJAudioPlayer::setGain(double gain)
 {
@@ -67,7 +76,7 @@ void DJAudioPlayer::setGain(double gain)
         std::cout << "DJAudioPlayer::setGain gain should be between 0 and 1" << std::endl;
     }
     else {
-        transportSource.setGain(gain);
+        transportSource.setGain(gain); // set the volume of the track
     }
    
 }
@@ -78,12 +87,12 @@ void DJAudioPlayer::setSpeed(double ratio)
         std::cout << "DJAudioPlayer::setSpeed ratio should be between 0 and 100" << std::endl;
     }
     else {
-        resampleSource.setResamplingRatio(ratio);
+        resampleSource.setResamplingRatio(ratio); // set the speed of the track
     }
 }
 void DJAudioPlayer::setPosition(double posInSecs)
 {
-    transportSource.setPosition(posInSecs);
+    transportSource.setPosition(posInSecs); // set the position of the track
 }
 
 void DJAudioPlayer::setPositionRelative(double pos)
@@ -94,37 +103,32 @@ void DJAudioPlayer::setPositionRelative(double pos)
     }
     else {
         double posInSecs = transportSource.getLengthInSeconds() * pos;
-        setPosition(posInSecs);
+        setPosition(posInSecs); // set the relative position
     }
 }
 
-void DJAudioPlayer::start()
+void DJAudioPlayer::start() // when play button is toggled
 {
-    if(!isPlaying) transportSource.start();
-    else transportSource.stop();
-    isPlaying = !isPlaying;
-
+    if(!isPlaying) transportSource.start(); // start playing if audio track is not playing
+    else transportSource.stop(); // stop play if audio track is playing
+    isPlaying = !isPlaying; // flip the boolean value
 }
 
-//void DJAudioPlayer::stop()
-//{
-//  transportSource.stop();
-//}
 
-double DJAudioPlayer::getPositionRelative()
+double DJAudioPlayer::getPositionRelative() // get relative position
 {
     return transportSource.getCurrentPosition() / transportSource.getLengthInSeconds();
 }
 
-// New code
+// New code -----------------------------------------------------------------------------------------
 
 void DJAudioPlayer::setLowPass(double hertz)
 {
     if(isPlaying) // necessary because reader is only created by format manager in loadURL
     {
         auto* reader = readerSource -> getAudioFormatReader();
-        // low pass filter attenuates frequencies above cutoff frequencies
-
+        
+        // low pass filter attenuates frequencies below cutoff frequencies
         low_source.setCoefficients(IIRCoefficients::makeLowPass(reader->sampleRate, hertz));
     }
 }
@@ -134,8 +138,9 @@ void DJAudioPlayer::setHighPass(double hertz)
     if(isPlaying) // necessary because reader is only created by format manager in loadURL
     {
         auto* reader = readerSource -> getAudioFormatReader();
-        // low pass filter attenuates frequencies above cutoff frequencies
-
+        
+        // high pass filter attenuates frequencies above cutoff frequencies
         high_source.setCoefficients(IIRCoefficients::makeHighPass(reader->sampleRate, hertz));
     }
 }
+// End of new code -----------------------------------------------------------------------------------
