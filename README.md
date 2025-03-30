@@ -6,6 +6,7 @@ This is a project done in fulfilment of CM2005 Object oriented programming modul
 - Adjust High Pass and Low Pass filters
 - Control gain and speed of the tracks
 - Loop the music
+- GUI for user to use the features listed above
 
 ## 🤖    Technical Highlights
 The project involves objects, classes and the use of inheritance to extend functionality from parent classes.
