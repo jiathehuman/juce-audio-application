@@ -10,5 +10,5 @@ This is a project done in fulfilment of CM2005 Object oriented programming modul
 ## 🤖    Technical Highlights
 The project involves objects, classes and the use of inheritance to extend functionality from parent classes.
 
-**Screenshot of Program**
+**Screenshot of Program** <br>
 ![image](https://github.com/user-attachments/assets/07c2cb80-4515-4f37-89a1-8905739e6b86)
