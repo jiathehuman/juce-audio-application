@@ -1,5 +1,5 @@
 # Juce Audio Application
-This is a project done in fulfilment of CM2005 Object oriented programming module. 
+This is a project done in fulfilment of CM2005 Object oriented programming module. It involves creating a DJ application using the JUCE framework (open source C++ framework for audio applications). 
 
 ## 📢    Key Features
 - DJ audio application where you can upload audio files to 'mix and blend' tracks and create interesting music!
